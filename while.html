@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<head>
+<html lang="en">
+<meta charset="utf-8">
+<title>game dev</title>
+</head>
+<body><h1>animation</h1>
+<canvas id="myCanvas" width="400" height="500" style="border:1px solid #000000;"></canvas>
+<script>
+window.addEventListener('load',function(){
+var GAME_WIDTH=400;
+var GAME_HEIGHT=500;
+var gameLive=true;
+var enemies=[
+  {
+    x:100,
+    y:150,
+    speedY:1,
+    w:30,
+    h:30
+},
+  {    x:150,
+      y:200,
+      speedY:2,
+      w:30,
+      h:30},
+{
+        x:240,
+        y:300,
+        speedY:4,
+        w:30,
+        h:30},
+
+          {x:300,
+          y:340,
+          speedY:7,
+          w:30,
+          h:30,
+        }];
+          //addplayer
+          var player={
+          x:10,
+          y:120,
+          speedX:2,
+          w:30,
+          h:30,
+          ismoving:false
+        };
+        var goal={
+          x:380,
+          y:120,
+          w:20,
+          h:20
+
+        };
+        var sprites=function(){};
+        var movePlayer=function(){
+          player.ismoving=true;
+        };
+        var stopPlayer=function(){
+          player.ismoving=false;
+        };
+
+var speed=5;
+var speedY=0;
+var canvas=document.getElementById("myCanvas");
+var ctx=canvas.getContext("2d");
+canvas.addEventListener("mousedown",movePlayer);
+canvas.addEventListener("mouseup",stopPlayer);
+var load=function(){
+  sprites.player=new Image();
+  sprites.player.src='fish.png';
+
+  sprites.background=new Image();
+  sprites.background.src='back.png';
+
+  sprites.enemy=new Image();
+  sprites.enemy.src='shark.png';
+
+  sprites.goal=new Image();
+  sprites.goal.src='chest.png';
+}
+var update=function(){
+  if(player.ismoving){
+    player.x+=player.speedX
+  }
+
+
+  var j=0;
+  var n=enemies.length;
+
+  enemies.forEach(function(element,index){
+
+if(checkCollision(player,goal)){
+if(gameLive) {
+  gameLive=false;
+
+  alert('you\'ve won');
+
+  window.location="";
+}
+
+}
+if(checkCollision(player,element)){
+      gameLive=false;
+      alert('game over');
+      window.location="";
+
+    }
+    element.y+=element.speedY;
+    if(element.y<=10){
+      element.y=10;
+      element.speedY*=-1;
+    }
+    else if (element.y>=GAME_HEIGHT-50) {
+      element.y=GAME_HEIGHT-50;
+      element.speedY*=-1;
+    }
+  });
+};
+var draw=function(){
+  ctx.clearRect(0,0,GAME_WIDTH,GAME_HEIGHT);
+ctx.drawImage(sprites.background,0,0);
+ctx.drawImage(sprites.player,player.x,player.y);
+
+enemies.forEach(function(element, index){
+ctx.drawImage(sprites.enemy,element.x,element.y);
+});
+ctx.drawImage(sprites.goal,goal.x,goal.y);
+
+
+
+
+
+//player
+/*ctx.fillStyle="#00FF00";
+ctx.fillRect(player.x,player.y,player.w,player.h);
+ctx.fillStyle="#FF0000";
+ctx.fillRect(goal.x,goal.y,goal.w,goal.h);
+
+//enemies
+  ctx.fillStyle="#3333FF";
+    enemies.forEach(function(element, index){
+    ctx.fillRect(element.x,element.y,element.w,element.h,);*/
+
+};
+var step=function(){
+  update();
+  draw();
+  if(gameLive){
+  window.requestAnimationFrame(step);}
+};
+var checkCollision=function(rect1,rect2){
+  var closeOnWidth=Math.abs(rect1.x-rect2.x)<=Math.max(rect1.w,rect2.w);
+  var closeOnHeight=Math.abs(rect1.y-rect2.y)<=Math.max(rect1.h,rect2.h);
+  return closeOnWidth&&closeOnHeight;
+}
+load();
+step();
+});
+</script>
+</body>
+</html>
