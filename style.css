@@ -1,0 +1,21 @@
+#canvasBg {
+    width: 800px;
+    height: 600px;
+    background: white;
+}
+
+canvas {
+    display: block;
+}
+
+body {
+    background: black;
+}
+
+#canvasEntities{
+    width: 800px;
+    height: 600px;
+}
+#overlapping canvas{
+    margin: -600px 0 0;
+}
